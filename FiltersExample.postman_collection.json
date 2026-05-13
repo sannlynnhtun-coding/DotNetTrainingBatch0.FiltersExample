@@ -1,0 +1,189 @@
+{
+	"info": {
+		"_postman_id": "8a2f6b1c-7d9e-4a3b-9c5d-8f1e2d3c4b5a",
+		"name": "Filters Example API",
+		"description": "Postman collection for testing ASP.NET Core Filters (Action, Result, Exception, etc.)",
+		"schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json"
+	},
+	"item": [
+		{
+			"name": "Get Sample",
+			"event": [
+				{
+					"listen": "test",
+					"script": {
+						"exec": [
+							"pm.test(\"Status code is 200\", function () {",
+							"    pm.response.to.have.status(200);",
+							"});",
+							"pm.test(\"Response contains message\", function () {",
+							"    var jsonData = pm.response.json();",
+							"    pm.expect(jsonData.message).to.eql(\"Hello from Filter Example API!\");",
+							"});",
+							"pm.test(\"Check ResponseTimeFilter Header\", function () {",
+							"    pm.response.to.have.header(\"X-Action-Duration-ms\");",
+							"});"
+						],
+						"type": "text/javascript"
+					}
+				}
+			],
+			"request": {
+				"method": "GET",
+				"header": [],
+				"url": {
+					"raw": "{{baseUrl}}/api/Sample",
+					"host": [
+						"{{baseUrl}}"
+					],
+					"path": [
+						"api",
+						"Sample"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "Post Sample (Valid)",
+			"event": [
+				{
+					"listen": "test",
+					"script": {
+						"exec": [
+							"pm.test(\"Status code is 200\", function () {",
+							"    pm.response.to.have.status(200);",
+							"});",
+							"pm.test(\"Response confirms received name\", function () {",
+							"    var jsonData = pm.response.json();",
+							"    pm.expect(jsonData.message).to.include(\"Received: Postman\");",
+							"});",
+							"pm.test(\"Check ResponseTimeFilter Header\", function () {",
+							"    pm.response.to.have.header(\"X-Action-Duration-ms\");",
+							"});"
+						],
+						"type": "text/javascript"
+					}
+				}
+			],
+			"request": {
+				"method": "POST",
+				"header": [
+					{
+						"key": "Content-Type",
+						"value": "application/json",
+						"type": "text"
+					}
+				],
+				"body": {
+					"mode": "raw",
+					"raw": "{\n    \"name\": \"Postman\"\n}"
+				},
+				"url": {
+					"raw": "{{baseUrl}}/api/Sample",
+					"host": [
+						"{{baseUrl}}"
+					],
+					"path": [
+						"api",
+						"Sample"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "Post Sample (Invalid - Too Long)",
+			"event": [
+				{
+					"listen": "test",
+					"script": {
+						"exec": [
+							"pm.test(\"Status code is 400\", function () {",
+							"    pm.response.to.have.status(400);",
+							"});",
+							"pm.test(\"Error message exists\", function () {",
+							"    var jsonData = pm.response.json();",
+							"    pm.expect(jsonData.errors).to.have.property(\"Name\");",
+							"});"
+						],
+						"type": "text/javascript"
+					}
+				}
+			],
+			"request": {
+				"method": "POST",
+				"header": [
+					{
+						"key": "Content-Type",
+						"value": "application/json",
+						"type": "text"
+					}
+				],
+				"body": {
+					"mode": "raw",
+					"raw": "{\n    \"name\": \"ThisNameIsWayTooLongForValidation\"\n}"
+				},
+				"url": {
+					"raw": "{{baseUrl}}/api/Sample",
+					"host": [
+						"{{baseUrl}}"
+					],
+					"path": [
+						"api",
+						"Sample"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "Post Sample (Invalid - Missing Name)",
+			"event": [
+				{
+					"listen": "test",
+					"script": {
+						"exec": [
+							"pm.test(\"Status code is 400\", function () {",
+							"    pm.response.to.have.status(400);",
+							"});"
+						],
+						"type": "text/javascript"
+					}
+				}
+			],
+			"request": {
+				"method": "POST",
+				"header": [
+					{
+						"key": "Content-Type",
+						"value": "application/json",
+						"type": "text"
+					}
+				],
+				"body": {
+					"mode": "raw",
+					"raw": "{\n    \"name\": \"\"\n}"
+				},
+				"url": {
+					"raw": "{{baseUrl}}/api/Sample",
+					"host": [
+						"{{baseUrl}}"
+					],
+					"path": [
+						"api",
+						"Sample"
+					]
+				}
+			},
+			"response": []
+		}
+	],
+	"variable": [
+		{
+			"key": "baseUrl",
+			"value": "http://localhost:5220",
+			"type": "string"
+		}
+	]
+}

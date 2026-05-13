@@ -1,0 +1,6 @@
+@DotNetTrainingBatch0.FiltersExample_HostAddress = http://localhost:5220
+
+GET {{DotNetTrainingBatch0.FiltersExample_HostAddress}}/weatherforecast/
+Accept: application/json
+
+###
